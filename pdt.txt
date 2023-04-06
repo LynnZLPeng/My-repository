@@ -1,0 +1,138 @@
+package io;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+//import java.util.Base64.Decoder;
+//import java.util.Base64.Encoder;
+
+public class PdfToBinaryUtil {
+//static Base64.Encoder encoder = Base64.getEncoder();
+
+//static Decoder decoder = Base64.getDecoder();
+
+public static void main(String[] args) {
+//String base64String = getPDFBinary("D:/JavaLOLFolder/filesplit/acp.pdf");
+//FileTool.writeStringToFile(base64String, "D:/JavaLOLFolder/filesplit/acp1.txt");
+String base64String1 = FileTool.readFileToString("D:/JavaLOLFolder/filesplit/acp1.txt");
+base64StringToPDF(base64String1, "D:/JavaLOLFolder/filesplit/acp1.pdf");
+//System.out.println(base64String);
+
+//write to txt and read from txt
+
+//File f = new File("d:/JavaLOLFolder/lol.txt");
+/*File f1 = new File("D:/JavaLOLFolder/filesplit/acp1.txt");
+try (FileWriter fw = new FileWriter(f1)) {
+	
+	char[] cs = base64String.toCharArray();
+	fw.write(cs);
+
+} catch (IOException e) {
+	e.printStackTrace();
+}*/
+	/*File f = new File("d:/JavaLOLFolder/lol.txt");
+	try (FileReader fr = new FileReader(f); ) {
+		char all[] = new char[(int) f.length()];
+		fr.read(all);
+		String base64String = all.toString();
+		base64StringToPDF(base64String, "D:/JavaLOLFolder/filesplit/acp1.pdf");
+
+	} catch (IOException e) {
+		e.printStackTrace();
+	}*/
+
+//FileTool.writeStringToFile(base64String, "1.txt");
+
+//FileTool可参考https://blog..net/Kangyucheng/article/details/86981414
+
+
+
+}
+
+public static String getPDFBinary(String filePath) {
+File file = new File(filePath);
+
+try {
+FileInputStream fileInputStream = new FileInputStream(file);
+
+BufferedInputStream bufferInputStream = new BufferedInputStream(fileInputStream);
+
+ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+BufferedOutputStream bout = new BufferedOutputStream(byteArrayOutputStream);
+
+byte[] buffer = new byte[1024];
+
+int len = bufferInputStream.read(buffer);
+
+while (len != -1) {
+bout.write(buffer, 0, len);
+
+len = bufferInputStream.read(buffer);
+
+}
+
+bout.flush();
+
+byte[] bytes = byteArrayOutputStream.toByteArray();
+
+bufferInputStream.close();
+
+//return encoder.encodeBuffer(bytes).trim();
+return Base64.getEncoder().encodeToString(bytes);
+
+} catch (Exception e) {
+e.printStackTrace();
+
+}
+
+return null;
+
+}
+
+public static void base64StringToPDF(String base64String, String newFile) {
+try {
+//byte[] bytes = decoder.decodeBuffer(base64String);
+byte[] bytes = Base64.getDecoder().decode(base64String);
+
+ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+
+BufferedInputStream bin = new BufferedInputStream(bais);
+
+File file = new File(newFile);
+
+FileOutputStream fout = new FileOutputStream(file);
+
+BufferedOutputStream bout = new BufferedOutputStream(fout);
+
+byte[] buffers = new byte[1024];
+
+int len = bin.read(buffers);
+
+while (len != -1) {
+bout.write(buffers, 0, len);
+
+len = bin.read(buffers);
+
+}
+
+bout.flush();
+
+bout.close();
+
+} catch (Exception e) {
+e.printStackTrace();
+
+}
+
+}
+
+}
